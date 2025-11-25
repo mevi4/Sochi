@@ -88,7 +88,6 @@ const PhotoUploadForm = () => {
     
     if (validateForm()) {
       console.log('Форма отправлена:', formData);
-      // Здесь обычно отправка данных на сервер
       setIsSubmitted(true);
       setFormData({
         username: '',
@@ -114,7 +113,7 @@ const PhotoUploadForm = () => {
     <div className="photo-upload-form">
       {isSubmitted && (
         <div className="success-message">
-          ✅ Фотография успешно загружена! Спасибо за ваш вклад в галерею Сочи!
+          Фотография успешно загружена! Спасибо за ваш вклад в галерею Сочи!
         </div>
       )}
 
