@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSochiContext } from '../context/SochiContext.js';
 
 const Home = () => {
+  const { cityData, updateVisitStats, userPreferences } = useSochiContext();
+
+  useEffect(() => {
+    updateVisitStats('home');
+  }, []);
+
   return (
-    <div className="page">
+    <div className="stats-grid-main">
       <div className="hero-section">
-        <h1>Добро пожаловать в Сочи!</h1>
-        <p>Курортная столица России на берегу Черного моря</p>
+        <h1>Добро пожаловать в {cityData.name}!</h1>
+        <p>{cityData.description}</p>
       </div>
       
+      <div className="city-stats">
+        <h3>📊 Краткая статистика:</h3>
+        <div className="stats-grid">
+          <div className="stat-item">
+            <span className="stat-label">Население:</span>
+            <span className="stat-value">{cityData.population}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Площадь:</span>
+            <span className="stat-value">{cityData.area}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Климат:</span>
+            <span className="stat-value">{cityData.climate}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Часовой пояс:</span>
+            <span className="stat-value">{cityData.timezone}</span>
+          </div>
+        </div>
+      </div>
+
       <div className="quick-links">
         <h2>Быстрые ссылки:</h2>
         <div className="links-grid">

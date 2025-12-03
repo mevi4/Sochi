@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSochiContext } from '../context/SochiContext.js';
 import PhotoUploadForm from '../components/PhotoUploadForm.js';
 
 const Photos = () => {
   const { category } = useParams();
   const [activeCategory, setActiveCategory] = useState(category || 'all');
+  const { addVisitedCategory, toggleFavoritePhoto, isFavoritePhoto, updateVisitStats } = useSochiContext();
   
   const photoCategories = {
     all: "Все фотографии",
@@ -14,6 +16,13 @@ const Photos = () => {
     city: "Городская архитектура",
     mountains: "Горные виды"
   };
+
+  useEffect(() => {
+    updateVisitStats('photos');
+    if (activeCategory !== 'all') {
+      addVisitedCategory(activeCategory);
+    }
+  }, [activeCategory]);
 
   useEffect(() => {
     if (category) {
@@ -54,18 +63,28 @@ const Photos = () => {
       </div>
 
       <div className="photos-grid">
-        {filteredPhotos.map(photo => (
-          <div key={photo.id} className="photo-card">
-            <div className="photo-placeholder">
-              📷 {photo.title}
+        {filteredPhotos.map(photo => {
+          const isFavorite = isFavoritePhoto(photo.id);
+          return (
+            <div key={photo.id} className="photo-card">
+              <div className="photo-placeholder">
+                📷 {photo.title}
+                <button 
+                  onClick={() => toggleFavoritePhoto(photo.id)}
+                  className={`photo-favorite-btn ${isFavorite ? 'active' : ''}`}
+                  title={isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
+                >
+                  {isFavorite ? '❤️' : '🤍'}
+                </button>
+              </div>
+              <div className="photo-info">
+                <h4>{photo.title}</h4>
+                <p>{photo.description}</p>
+                <span className="photo-category">{photoCategories[photo.category]}</span>
+              </div>
             </div>
-            <div className="photo-info">
-              <h4>{photo.title}</h4>
-              <p>{photo.description}</p>
-              <span className="photo-category">{photoCategories[photo.category]}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="upload-section">
